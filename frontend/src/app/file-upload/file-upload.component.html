@@ -1,0 +1,9 @@
+<div >
+  <input [attr.required] = "required"
+         style="display: none"
+         [accept]="accept" 
+         type="file"  
+         (change)="onFileChanged($event)" #fileInput>
+  <span class="file-name">{{file ? file.name : noFileLabel }}</span>
+  <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">Upload</button>
+</div>

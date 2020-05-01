@@ -1,0 +1,17 @@
+<header>
+  <mat-toolbar color="primary">
+    <div class="nav-container">
+      <div class="apps-container">
+        <button mat-button class="nav-item" routerLink="/">Home</button>
+        <button mat-button class="nav-item" routerLink="/courses">Courses</button>
+
+      </div>
+      <div class="user-action-container">
+        <button mat-button class="nav-item" *ngIf="auth.loggedIn">{{ (auth.userProfile$ | async).name }}</button>
+        <button mat-button class="nav-item" (click)="auth.login()" *ngIf="!auth.loggedIn">Log In</button>
+        <button mat-button class="nav-item" (click)="auth.logout()" *ngIf="auth.loggedIn">Log Out</button>
+      </div>
+    </div>
+  </mat-toolbar>
+</header>
+

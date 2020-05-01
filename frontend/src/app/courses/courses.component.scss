@@ -1,0 +1,32 @@
+.add-button-container {
+  padding: 10px;
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
+:host {
+  position: relative;
+  display: block;
+  height: 100%;
+}
+.no-courses {
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.courses-container {
+  display: flex;
+  padding: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  .course-card {
+    width: 300px;
+    margin: 10px;
+    .course-image {
+      height: 200px;
+    }
+  }
+}
+

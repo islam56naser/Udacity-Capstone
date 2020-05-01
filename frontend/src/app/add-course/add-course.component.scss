@@ -1,0 +1,13 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  .add-card {
+    width: 400px;
+  }
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+  }
+}

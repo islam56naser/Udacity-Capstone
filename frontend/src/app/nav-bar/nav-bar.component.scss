@@ -1,0 +1,12 @@
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  height: 100%;
+  .apps-container {
+    display: flex;
+  }
+  .user-action-container {
+    display: flex;
+  }
+}

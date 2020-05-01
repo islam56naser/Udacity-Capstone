@@ -1,0 +1,27 @@
+<ng-container *ngIf="!isLoading">
+  <div class="add-button-container">
+    <button mat-raised-button routerLink="./add" color="primary">ADD COURSE</button>
+  </div>
+  <ng-container *ngIf="courses.length else noCourses">
+    <div class="courses-container">
+      <mat-card *ngFor="let course of courses" class="course-card">
+        <mat-card-header>
+          <mat-card-title>{{ course.name }}</mat-card-title>
+          <mat-card-subtitle>{{ course.createdAt | date }}</mat-card-subtitle>
+        </mat-card-header>
+        <img class="course-image" mat-card-image [src]="course.attachmentUrl" [alt]="course.name">
+        <mat-card-content>
+          <p>{{ course.description }}</p>
+        </mat-card-content>
+        <mat-card-actions class="card-actions">
+          <button mat-button (click)="deleteCourse(course.courseId)" color="warn">DELETE</button>
+          <button mat-button (click)="onEditCourseClick(course)" color="primary">EDIT</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </ng-container>
+  <ng-template #noCourses>
+    <div class="no-courses">No Courses press Add courses button to add a new course</div>
+  </ng-template>
+</ng-container>
+<app-loading *ngIf="isLoading"></app-loading>

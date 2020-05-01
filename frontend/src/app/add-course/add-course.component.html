@@ -1,0 +1,28 @@
+<form #courseForm="ngForm" (ngSubmit)="courseForm.valid && fileValid && onSubmit()" class="form-container">
+  <mat-card class="add-card">
+    <mat-card-header>
+      <mat-card-title>ADD COURSE</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-fields">
+        <mat-form-field>
+          <input [(ngModel)]="course.name" name="name" matInput placeholder="name" required>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <textarea [(ngModel)]="course.description" name="description" matInput placeholder="description" required></textarea>
+        </mat-form-field>
+        <div class="file-upoad-container">
+          <label for="">Course Image * </label>
+          <app-file-upload [noFileLabel]="oldFileName" (fileChanged)="onFileChanged($event)"></app-file-upload>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions class="card-actions">
+      <button type="button" routerLink="/courses" mat-button color="secondary">BACK</button>
+      <button mat-button color="primary" [disabled]="!courseForm.valid || ! fileValid">SAVE</button>
+    </mat-card-actions>
+    <app-loading *ngIf="isLoading"></app-loading>
+  </mat-card>
+
+</form>
