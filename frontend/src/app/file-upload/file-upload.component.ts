@@ -8,7 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class FileUploadComponent implements OnInit {
   @Input() accept: string;
   @Input() required = true;
-  @Input() buttonText = 'upload file';
+  @Input() buttonText = 'Choose file';
   @Input() noFileLabel = 'no file selected';
   @Output() fileChanged: EventEmitter<any> = new EventEmitter();
   file: File;

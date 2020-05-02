@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpBackend, HttpHeaders } from '@angular/common/http';
-import { Observable, from, EMPTY, empty, of } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Course, CreateCourseRequest } from './courses/models/Course';
-import { CreateTopicRequest, Topic } from './courses/models/Topic';
 
 @Injectable({
   providedIn: 'root'
@@ -26,17 +25,6 @@ export class ApiService {
       map(res => res.item),
       switchMap((res) => this.uploadCourseImage(res.courseId, image))
     );
-  }
-
-  addTopic$(topic: CreateTopicRequest, image: File): Observable<any> {
-    return this.http.post<{item: Topic}>(`${environment.apiUrl}/courses`, topic).pipe(
-      map(res => res.item),
-      switchMap((res) => this.uploadTopicVideo(res.courseId, image))
-    );
-  }
-
-  uploadTopicVideo() {
-    
   }
 
   uploadCourseImage(courseId: string, image: File): Observable<any> {

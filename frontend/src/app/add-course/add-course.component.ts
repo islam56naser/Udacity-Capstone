@@ -32,7 +32,7 @@ export class AddCourseComponent {
       if (course) {
         const courseObject = JSON.parse(course) as Course;
         this.courseId = courseObject.courseId;
-        this.oldFileName = 'image';
+        this.oldFileName = 'image.jpg';
         this.course = {
           name: courseObject.name,
           description: courseObject.description
@@ -78,7 +78,6 @@ export class AddCourseComponent {
   }
 
   onFileChanged(file: File) {
-    console.log('ffdjkfkjhdkf', file);
     this.file = file;
   }
 }

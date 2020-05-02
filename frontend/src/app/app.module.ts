@@ -5,7 +5,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { RouterModule } from '@angular/router';
-import { ProfileComponent } from './profile/profile.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from './interceptor.service';
@@ -22,21 +21,18 @@ import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { LoadingComponent } from './loading/loading.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import { CourseTopicsComponent } from './course-topics/course-topics.component';
-import { AddTopicComponent } from './add-topic/add-topic.component';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    ProfileComponent,
     CoursesComponent,
     AddCourseComponent,
     FileUploadComponent,
     LoadingComponent,
-    CourseTopicsComponent,
-    AddTopicComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
