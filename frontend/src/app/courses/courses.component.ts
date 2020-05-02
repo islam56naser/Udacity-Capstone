@@ -31,6 +31,10 @@ export class CoursesComponent implements OnInit {
     );
   }
 
+  goToTopics(course: Course) {
+    this.router.navigate(['./', course.courseId, 'topics'], { relativeTo: this.route });
+  }
+
   onEditCourseClick(course: Course) {
     this.router.navigate(['./edit'], { relativeTo: this.route, queryParams: { course: JSON.stringify(course) } });
   }

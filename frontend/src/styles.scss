@@ -19,3 +19,24 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
+.clickable {
+  cursor: pointer;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  .add-card {
+    width: 400px;
+  }
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+  }
+}

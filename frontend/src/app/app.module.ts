@@ -22,6 +22,9 @@ import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { LoadingComponent } from './loading/loading.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { CourseTopicsComponent } from './course-topics/course-topics.component';
+import { AddTopicComponent } from './add-topic/add-topic.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     CoursesComponent,
     AddCourseComponent,
     FileUploadComponent,
-    LoadingComponent
+    LoadingComponent,
+    CourseTopicsComponent,
+    AddTopicComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSidenavModule
   ],
   providers: [
     {
