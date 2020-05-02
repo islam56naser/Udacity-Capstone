@@ -32,9 +32,6 @@ provider:
     COURSES_TABLE: Courses-${self:provider.stage}
     COURSES_ID_INDEX: CoursesIdIndex
     COURSES_S3_BUCKET: courses-s3-islam2-${self:provider.stage}
-    TOPICS_TABLE: Topics-${self:provider.stage}
-    TOPICS_ID_INDEX: TopicsIdIndex
-    TOPICS_S3_BUCKET: topics-s3-islam-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     AUTH_0_SECRET_ID: Auth0CourseSecret-${self:provider.stage}
     AUTH_0_SECRET_FIELD: auth0Secret
@@ -71,12 +68,6 @@ custom:
       - name: UpdateCourseRequest
         contentType: application/json
         schema: ${file(models/update-course-request.json)}
-      - name: CreateTopicRequest
-        contentType: application/json
-        schema: ${file(models/create-topic-request.json)}
-      - name: UpdateTopicRequest
-        contentType: application/json
-        schema: ${file(models/update-topic-request.json)}
 
 
 functions:
@@ -161,10 +152,6 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.COURSES_TABLE}/index/${self:provider.environment.COURSES_ID_INDEX}
 
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
 
       - Effect: Allow
         Action:
@@ -196,120 +183,7 @@ functions:
           documentation:
             summary: Get a url to upload course image
             description: Get a url to upload course image
-
-
-  GetTopics:
-    handler: src/lambda/http/topics/getTopics.handler
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - s3:GetObject
-        Resource: arn:aws:s3:::${self:provider.environment.TOPICS_S3_BUCKET}/*
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
-    events:
-      - http:
-          method: get
-          path: courses/{courseId}/topics
-          cors: true
-          authorizer: Auth
-          documentation:
-            summary: Get Topics
-            description: Get the list of Topics for a course
-
-  CreateTopic:
-    handler: src/lambda/http/topics/createTopic.handler
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - dynamodb:PutItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
-    events:
-      - http:
-          method: post
-          path: courses/{courseId}/topics
-          cors: true
-          authorizer: Auth
-          reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: Create a new topic
-            description: Create a new topic for a course
-            requestModels:
-              'application/json': CreateTopicRequest
-
-  UpdateTopic:
-    handler: src/lambda/http/topics/updateTopic.handler
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - dynamodb:UpdateItem
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
-
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}/index/${self:provider.environment.TOPICS_ID_INDEX}
-    events:
-      - http:
-          method: put
-          path: courses/{courseId}/topics/{topicId}
-          cors: true
-          authorizer: Auth
-          reqValidatorName: RequestBodyValidator
-          documentation:
-            summary: Update Topic
-            description: Update a Topic by its id
-            requestModels:
-              'application/json': UpdateTopicRequest
-
-  DeleteTopic:
-    handler: src/lambda/http/topics/deleteTopic.handler
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - dynamodb:DeleteItem
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}
-
-      - Effect: Allow
-        Action:
-          - dynamodb:Query
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TOPICS_TABLE}/index/${self:provider.environment.TOPICS_ID_INDEX}
-
-      - Effect: Allow
-        Action:
-          - s3:DeleteObject
-        Resource: arn:aws:s3:::${self:provider.environment.TOPICS_S3_BUCKET}/*
-    events:
-      - http:
-          method: delete
-          path: courses/{courseId}/topics/{topicId}
-          cors: true
-          authorizer: Auth
-          documentation:
-            summary: Delete A topic
-            description: Delete A topic
-
-  TopicUploadUrl:
-    handler: src/lambda/http/topics/generateUploadUrl.handler
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - s3:PutObject
-        Resource: arn:aws:s3:::${self:provider.environment.TOPICS_S3_BUCKET}/*
-    events:
-      - http:
-          method: post
-          path: courses/{courseId}/topics/{topicId}/attachment
-          cors: true
-          authorizer: Auth
-          documentation:
-            summary: Get a url to upload topic video
-            description: Get a url to upload topic video
-          
+  
 resources:
   Resources:
     GatewayResponseDefault4XX:
@@ -345,32 +219,6 @@ resources:
           - IndexName: ${self:provider.environment.COURSES_ID_INDEX}
             KeySchema:
             - AttributeName: courseId
-              KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-
-    TopicDynamoDBTable:
-      Type: "AWS::DynamoDB::Table"
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: topicId
-            AttributeType: S
-          - AttributeName: courseId
-            AttributeType: S
-          - AttributeName: createdAt
-            AttributeType: S
-
-        KeySchema:
-          - AttributeName: courseId
-            KeyType: HASH
-          - AttributeName: createdAt
-            KeyType: RANGE
-        BillingMode: PAY_PER_REQUEST
-        TableName: ${self:provider.environment.TOPICS_TABLE}
-        GlobalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.TOPICS_ID_INDEX}
-            KeySchema:
-            - AttributeName: topicId
               KeyType: HASH
             Projection:
               ProjectionType: ALL
@@ -419,43 +267,6 @@ resources:
               Action: 's3:GetObject'
               Resource: 'arn:aws:s3:::${self:provider.environment.COURSES_S3_BUCKET}/*'
         Bucket: !Ref CourseAttachmentsBucket
-
-
-
-    TopicAttachmentsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        BucketName: ${self:provider.environment.TOPICS_S3_BUCKET}
-        CorsConfiguration:
-          CorsRules:
-            -
-              AllowedOrigins:
-                - '*'
-              AllowedHeaders:
-                - '*'
-              AllowedMethods:
-                - GET
-                - PUT
-                - POST
-                - DELETE
-                - HEAD
-              MaxAge: 3000
-
-
-    # TopicBucketPolicy:
-    #   Type: AWS::S3::BucketPolicy
-    #   Properties:
-    #     PolicyDocument:
-    #       Id: MyPolicy
-    #       Version: "2012-10-17"
-    #       Statement:
-    #         - Sid: PublicReadForGetBucketObjects
-    #           Effect: Allow
-    #           Principal: '*'
-    #           Action: 's3:GetObject'
-    #           Resource: 'arn:aws:s3:::${self:provider.environment.TOPICS_S3_BUCKET}/*'
-    #     Bucket: !Ref TopicAttachmentsBucket
-    
     
     KMSKey:
       Type: AWS::KMS::Key

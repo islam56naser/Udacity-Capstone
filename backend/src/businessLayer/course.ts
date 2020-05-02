@@ -5,7 +5,6 @@ import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 import { UpdateCourseRequest } from '../requests/UpdateCourseRequest'
 import { AppError } from '../errors/appError'
-import { getTopics } from './topic'
 
 const courseAccess = new CoursesAccess()
 const logger = createLogger('Courses')
@@ -48,12 +47,6 @@ export async function deleteCourse(courseId: string): Promise<void> {
     throw new AppError('Not found', 404)
   }
   logger.info('Course Found', { toBeDeletedCourse })
-  const topics = await getTopics(courseId)
-  if (topics.length > 0) {
-    logger.info('Course Has topics and cannot be deleted ', { courseId })
-    throw new AppError('Course has topics', 400)    
-  }
-  logger.info('Course Does not contain any topics', { toBeDeletedCourse })
   await courseAccess.deleteCourse(toBeDeletedCourse)
 
 }
